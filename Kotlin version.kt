@@ -99,17 +99,16 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
         }
     }
 
-    // initial greedy matching for sparse graphs
-    if(adj.sumOf { it.size } < `|L|` * log(`|R|`.toDouble(), 2.0).toInt())
-        for(l in 0..<`|L|`) {
-            for((r, w) in adj[l]){
-                if (rightPairs[r] == -1 && leftLabels[l] + rightLabels[r] == w){
-                    leftPairs[l] = r
-                    rightPairs[r] = l
-                    break
-                }
+    // initial greedy matching
+    for(l in 0..<`|L|`) {
+        for((r, w) in adj[l]){
+            if (rightPairs[r] == -1 && leftLabels[l] + rightLabels[r] == w){
+                leftPairs[l] = r
+                rightPairs[r] = l
+                break
             }
         }
+    }
 
     for (l in 0..<`|L|`) {
         if (leftPairs[l] != -1) continue
