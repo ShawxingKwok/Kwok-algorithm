@@ -2,7 +2,7 @@
 
 data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
 
-fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matching {
+fun kwok(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matching {
     val leftPairs = IntArray(`|L|`) { -1 }
     val rightPairs = IntArray(`|R|`) { -1 }
     val rightParents = IntArray(`|R|`) { -1 }
