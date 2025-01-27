@@ -1,6 +1,8 @@
 @file:Suppress("LocalVariableName","DuplicatedCode", "DANGEROUS_CHARACTERS")
 
-fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Int {
+data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
+
+fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matching {
     val leftPairs = IntArray(`|L|`) { -1 }
     val rightPairs = IntArray(`|R|`) { -1 }
     val rightParents = IntArray(`|R|`) { -1 }
@@ -26,7 +28,7 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
             visitedLefts += l
             return false
         }
-        
+
         // apply the found augment path
         @Suppress("NAME_SHADOWING")
         var r = r
@@ -44,7 +46,7 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
         while (true) {
             while (q.any()) {
                 val l = q.removeFirst()
-                if (leftLabels[l] == 0) { 
+                if (leftLabels[l] == 0) {
                     rightParents[firstUnmatchedR] = l
                     advance(firstUnmatchedR)
                     return
@@ -101,18 +103,17 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
 
     // initial greedy matching
     for(l in 0..<`|L|`) {
-        for((r, w) in adj[l]){
-            if (rightPairs[r] == -1 && leftLabels[l] + rightLabels[r] == w){
-                leftPairs[l] = r
-                rightPairs[r] = l
-                break
+            for((r, w) in adj[l]){
+                if (rightPairs[r] == -1 && leftLabels[l] + rightLabels[r] == w){
+                    leftPairs[l] = r
+                    rightPairs[r] = l
+                    break
+                }
             }
         }
-    }
 
     for (l in 0..<`|L|`) {
         if (leftPairs[l] != -1) continue
-
         q.clear()
         visitedLefts.clear()
         visitedRights.clear()
@@ -127,7 +128,7 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
         val firstUnmatchedR = (0..<`|R|`).first { rightPairs[it] == -1 }
         bfsUntilAppliesAugmentPath(firstUnmatchedR)
     }
-    
+
     var sum = 0
     outer@ for(l in 0..< `|L|`){
         for((r, w) in adj[l]){
@@ -141,5 +142,6 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
         leftPairs[l] = -1
         rightPairs[r] = -1
     }
-    return sum
+    
+    return Matching(leftPairs, rightPairs, sum)
 }
