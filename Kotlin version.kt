@@ -1,5 +1,8 @@
 @file:Suppress("LocalVariableName","DuplicatedCode", "DANGEROUS_CHARACTERS")
 
+import java.util.*
+import kotlin.collections.ArrayDeque
+
 data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
 
 /**
@@ -26,7 +29,7 @@ fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, a
     val leftLabels = IntArray(`|L|`) { l -> adj[l].maxOfOrNull { it.second } ?: 0 }
     val rightLabels = IntArray(`|R|`)
     val slacks = IntArray(`|R|`){ Int.MAX_VALUE }
-    val q = LinkedList<Int>()
+    val q = ArrayDeque<Int>()
 
     fun advance(r: Int): Boolean {
         rightOnEdge[r] = false
