@@ -1,7 +1,7 @@
 @file:Suppress("LocalVariableName","DuplicatedCode", "DANGEROUS_CHARACTERS")
 
-import java.util.*
 import kotlin.collections.ArrayDeque
+import kotlin.math.*
 
 data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
 
