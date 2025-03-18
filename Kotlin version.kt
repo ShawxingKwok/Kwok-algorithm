@@ -11,7 +11,7 @@ data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weigh
  * See https://arxiv.org/abs/2502.20889 for detailed information. 
  * @param `|L|` Size of vertices in L.
  * @param `|R|` Size of vertices in R.
- * @param adj The adjacent list. The type `Pair` is the adjacent vertex with weight.
+ * @param adj The adjacent list. The type `Pair<Int, Int>` is the adjacent vertex with weight.
  */
 fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, adj: List<List<Pair<Int, Int>>>): Matching {
     val leftPairs = IntArray(`|L|`) { -1 }
