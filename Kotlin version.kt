@@ -2,7 +2,15 @@
 
 data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
 
-fun kwok(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matching {
+/**
+ * Computes the maximum weight matching with run time significantly less than `O(|L||E|)` in experimental tests on random graphs. 
+ * Note that integer weights are not required, whereas it could probably accelerate the algorithm. 
+ * See https://arxiv.org/abs/2502.20889 for detailed information. 
+ * @param `|L|` Size of vertices in L.
+ * @param `|R|` Size of vertices in R.
+ * @param adj The adjacent list. The type `Pair` is the adjacent vertex with weight.
+ */
+fun unbalancedIncompleteLEKMWithListAndInitialMatching(`|L|`: Int, `|R|`: Int, adj: List<List<Pair<Int, Int>>>): Matching {
     val leftPairs = IntArray(`|L|`) { -1 }
     val rightPairs = IntArray(`|R|`) { -1 }
     val rightParents = IntArray(`|R|`) { -1 }
@@ -10,12 +18,14 @@ fun kwok(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matchi
 
     val visitedLefts = mutableListOf<Int>()
     val visitedRights = mutableListOf<Int>()
+    // Those with potential to be introduced. When the vertex is introduced after h adjustment, it remains in this list,
+    // but rightOnEdge[it] = false
     val onEdgeRights = mutableListOf<Int>()
     val rightOnEdge = BooleanArray(`|R|`)
 
     val leftLabels = IntArray(`|L|`) { l -> adj[l].maxOfOrNull { it.second } ?: 0 }
     val rightLabels = IntArray(`|R|`)
-    val slacks = IntArray(`|R|`)
+    val slacks = IntArray(`|R|`){ Int.MAX_VALUE }
     val q = LinkedList<Int>()
 
     fun advance(r: Int): Boolean {
@@ -59,6 +69,7 @@ fun kwok(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matchi
                         rightOnEdge[firstUnmatchedR] = true
                     }
                 }
+
                 for ((r, w) in adj[l]) {
                     if (rightVisited[r]) continue
                     val diff = leftLabels[l] + rightLabels[r] - w
@@ -103,25 +114,30 @@ fun kwok(`|L|`: Int, `|R|`: Int, adj: List<MutableList<Pair<Int, Int>>>): Matchi
 
     // initial greedy matching
     for(l in 0..<`|L|`) {
-            for((r, w) in adj[l]){
-                if (rightPairs[r] == -1 && leftLabels[l] + rightLabels[r] == w){
-                    leftPairs[l] = r
-                    rightPairs[r] = l
-                    break
-                }
+        for((r, w) in adj[l]){
+            if (rightPairs[r] == -1 && leftLabels[l] + rightLabels[r] == w){
+                leftPairs[l] = r
+                rightPairs[r] = l
+                break
             }
         }
+    }
 
     for (l in 0..<`|L|`) {
         if (leftPairs[l] != -1) continue
         q.clear()
+
+        for(r in visitedRights){
+            rightVisited[r] = false
+        }
+        for(r in onEdgeRights){
+            rightOnEdge[r] = false
+            slacks[r] = Int.MAX_VALUE
+        }
+
         visitedLefts.clear()
         visitedRights.clear()
         onEdgeRights.clear()
-
-        slacks.fill(Int.MAX_VALUE)
-        rightVisited.fill(false)
-        rightOnEdge.fill(false)
 
         visitedLefts += l
         q += l
