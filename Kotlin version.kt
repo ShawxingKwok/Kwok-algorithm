@@ -7,8 +7,14 @@ data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weigh
 
 /**
  * Computes the maximum weight matching with run time significantly less than `O(|L||E|)` in experimental tests on random graphs. 
- * Note that integer weights are not required, whereas it could probably accelerate the algorithm. 
- * See https://arxiv.org/abs/2502.20889 for detailed information. 
+ * Note that integer weights are not required, whereas it could probably accelerate the algorithm. There is more information at 
+ * https://arxiv.org/abs/2502.20889. 
+ *
+ * Subsequently, I discovered that the theoretical time complexity could be reduced from O(∣L∣∣E∣+∣L∣∣R∣min(∣L∣,N/p)) to O(∣L∣∣E∣+∣L∣^2 log∣L∣). 
+ * However, this runtime is effectively equivalent to that of solving the problem as a min-cost max-flow problem, since Dijkstra’s algorithm is 
+ * executed ∣L∣ times using a Fibonacci heap. Therefore, I have decided not to update the paper until I can establish a suitable expectation 
+ * upper bound.
+ *
  * @param `|L|` Size of vertices in L.
  * @param `|R|` Size of vertices in R.
  * @param adj The adjacent list. The type `Pair<Int, Int>` is the adjacent vertex with weight.
