@@ -6,7 +6,7 @@ import kotlin.math.*
 data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
 
 /**
- * Computes the maximum weight matching with run time significantly less than `O(|L||E|)` in experimental tests on random graphs. 
+ * Computes the maximum weight matching with run time significantly less than `O(|L||E|)` in experimental tests on random graphs where |L| <= |R|. 
  * Note that integer weights are not required, whereas it could probably accelerate the algorithm. There is more information at 
  * https://arxiv.org/abs/2502.20889. 
  *
