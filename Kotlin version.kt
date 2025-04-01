@@ -7,7 +7,7 @@ data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weigh
 
 /**
  * Computes the maximum weight matching with run time significantly less than `O(|L||E|)` in experimental tests on random graphs where |L| <= |R|. 
- * There is more information at https://arxiv.org/abs/2502.20889. New version is on the way.
+ * There is more information at https://arxiv.org/abs/2502.20889.
  *
  * @param `|L|` Size of vertices in L.
  * @param `|R|` Size of vertices in R.
