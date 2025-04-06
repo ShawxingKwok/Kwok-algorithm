@@ -6,7 +6,7 @@ import kotlin.math.*
 data class Matching(val leftPairs: IntArray, val rightPairs: IntArray, val weightSum: Int)
 
 /**
- * Computes the maximum weight matching with run time significantly less than `O(|L||E|)` in experimental tests on random graphs where |L| <= |R|. 
+ * Computes the maximum weight matching with run time `O(E^1.4 + LR)` estimated from experimental tests on random graphs where |L| <= |R|. 
  * There is more information at https://arxiv.org/abs/2502.20889.
  *
  * @param `|L|` Size of vertices in L.
